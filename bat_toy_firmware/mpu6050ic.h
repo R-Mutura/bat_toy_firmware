@@ -34,6 +34,7 @@ void mpu_init(){
   if(x==1)  angle.angle_x = 0;
   else if(x==2)  angle.angle_y = 0;
   else if(x==3)  angle.angle_z = 0;
+  else {return;}
  }
 
  float getaccelz(){

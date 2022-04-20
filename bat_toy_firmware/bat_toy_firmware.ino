@@ -19,16 +19,25 @@ Adafruit_SSD1306 mydisplay = Adafruit_SSD1306(128, 64, &Wire);
 #define rst_btn    18
 #define on_off_btn 23
 
+//onebutton initialization
+    OneButton btn = OneButton(
+    rst_btn,  // Input pin for the button
+    true,        // Button is active LOW
+    true         // Enable internal pull-up resistor
+     );
+  
 ///////variables////////////
 int flips    = 0;
 int spins    = 0;
 int halfspin = 0;
 int face     = 0; //face == 0 means faceup , face == 1 means facedown
 int currentface = 0;//will be read when reset is pressed
-
+int levelcompleted = 0;
 
 int level = 0; //double click reset to select the level of desire
 
+void handleClick();
+void handlelongpress();
 void setup() {
   // put your setup code here, to run once:
  
@@ -63,8 +72,15 @@ void setup() {
     
     pinMode(dbg_led, OUTPUT);
 
-    
-    
+
+    btn.attachClick(handleClick); 
+      
+    btn.attachDoubleClick([]() {
+    if(level <= 3 ) level++;
+    else{ level = 0;}
+    });
+
+    btn.attachLongPressStart(handlelongpress);
 }
 
 void loop() {
@@ -76,6 +92,7 @@ void loop() {
 
 */
 
+   btn.tick();
 int moved = 0;
 int halt = 0;
   //GETTING ACCELERATIONS DATA
@@ -126,11 +143,11 @@ NOTE :I SPIN == IF(START VALUE - CURRENT VALUE)>360...WE LL CHECK OVER FLOW IF T
    }
 
   //now to determine if we are facing up or down with the help of the ACCELERATION IN Z-AXIS
-  if(moved == 1){//ensure there was movement
+  if(moved == 1 && halt == 1){//ensure there was movement and then it stopped
     float side = getaccelz();// when face up g is -ve and vice versa
     face = side < 0 ? 0 : 1 ;
     //then we get the completed level
-    
+    String infos = Levels ();
   }
   
 //OTHERS 
@@ -143,18 +160,39 @@ SLEEP AND WAKEUP FUNCTIONS
 String Levels (){
   
   if( flips==1 && spins==0 && (currentface == face) && level == 1){
+    levelcompleted = 1;
     return "level 1 Complete";
     }
-   else if(flips==1 && spins==1 && (currentface == face)&& level == 2){
+   else if(flips==1 && spins==1 && (currentface == face)&& level == 2 && levelcompleted >= 1){
+    levelcompleted = 2;
    return "level 2 Complete";
    }
 
-   else if(flips==1 && halfspin==1 && (currentface != face) && level == 3){
+   else if(flips==1 && halfspin==1 && (currentface != face) && level == 3 && levelcompleted >= 2){
+    levelcompleted = 3;
    return "level 3 Complete";
    }
-   else if( level == 0)return "Select Level";
+   else if( level == 0)return "Select Level..";
+   else if( (level == 2 || level == 3 ) && levelcompleted != 1 ) return "Please finish Level 1";
+   else if( (level == 3 ) && levelcompleted != 2 ) return "Please finish Level 2";
 
    else{
-     return "level FAILED!!!";
+     return "level ^_^ FAILED!!!";
     }
+  }
+
+void handleClick(){
+    //reset values of spins and flips displayed
+    resetangle(1);
+    resetangle(2);
+    resetangle(3);
+    flips    = 0;
+    spins    = 0;
+    halfspin = 0;
+    float side = getaccelz();
+    currentface = side < 0 ? 0 : 1 ;
+   }
+ void handlelongpress(){
+  //reset the levels to zero
+  levelcompleted =0;
   }
