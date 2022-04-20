@@ -175,9 +175,11 @@ NOTE :I SPIN == IF(START VALUE - CURRENT VALUE)>360...WE LL CHECK OVER FLOW IF T
     
     mydisplay.clearDisplay();
     mydisplay.setCursor(0, 0);
-    mydisplay.print("Spins");
+     mydisplay.print("Level ");
+     mydisplay.println(level);
+    mydisplay.print("Spins = ");
     mydisplay.println(spins);
-    mydisplay.print("BackFlips");
+    mydisplay.print("BackFlips = ");
     mydisplay.println(flips);
     mydisplay.println(infos);
      
