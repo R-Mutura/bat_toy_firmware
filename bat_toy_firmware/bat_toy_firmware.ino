@@ -15,6 +15,9 @@ Adafruit_SSD1306 mydisplay = Adafruit_SSD1306(128, 64, &Wire);
 #define acc_int    10
 #define mpu_int    9
 #define dbg_led    15
+#define accel_pwr  25
+#define oled_pwr   26
+#define gyro_pwr   27
 //buttons
 #define rst_btn    18
 #define on_off_btn 23
@@ -36,11 +39,28 @@ int levelcompleted = 0;
 
 int level = 0; //double click reset to select the level of desire
 
+int sleepy = 0;
+int gotosleep_flag = 0;
+
 void handleClick();
 void handlelongpress();
+void handelesleep();
 void setup() {
   // put your setup code here, to run once:
- 
+      pinMode(acc_int, INPUT);
+    pinMode(mpu_int, INPUT);
+    
+    //pinMode(rst_btn, INPUT_PULLUP);
+    pinMode(on_off_btn, INPUT_PULLUP);
+    attachInterrupt(on_off_btn, handelesleep, LOW);
+    pinMode(dbg_led, OUTPUT);
+    pinMode(accel_pwr, OUTPUT);
+    pinMode(oled_pwr, OUTPUT);
+    pinMode(gyro_pwr, OUTPUT);
+
+    digitalWrite(accel_pwr, HIGH);
+    digitalWrite(oled_pwr, HIGH);
+    digitalWrite(gyro_pwr, HIGH);
  
   Serial.begin(115200);
   while (!Serial)
@@ -64,15 +84,8 @@ void setup() {
   //MXC INITIALIZATION
       MXC_init();
 
-    pinMode(acc_int, INPUT);
-    pinMode(mpu_int, INPUT);
-    
-    pinMode(rst_btn, INPUT_PULLUP);
-    pinMode(on_off_btn, INPUT_PULLUP);
-    
-    pinMode(dbg_led, OUTPUT);
 
-
+    
     btn.attachClick(handleClick); 
       
     btn.attachDoubleClick([]() {
@@ -91,7 +104,18 @@ void loop() {
 3. DETECT WHETHER FACE UP OR DOWN AFTER LANDING OR OTHERWISE
 
 */
-
+  
+   if(gotosleep_flag == 1){
+    gotosleep();
+    }
+   if(sleepy == 1)
+   {
+    sleepy == 0;
+    digitalWrite(accel_pwr, HIGH);
+    digitalWrite(oled_pwr, HIGH);
+    digitalWrite(gyro_pwr, HIGH);   
+    }
+    
    btn.tick();
 int moved = 0;
 int halt = 0;
@@ -148,11 +172,21 @@ NOTE :I SPIN == IF(START VALUE - CURRENT VALUE)>360...WE LL CHECK OVER FLOW IF T
     face = side < 0 ? 0 : 1 ;
     //then we get the completed level
     String infos = Levels ();
+    
+    mydisplay.clearDisplay();
+    mydisplay.setCursor(0, 0);
+    mydisplay.print("Spins");
+    mydisplay.println(spins);
+    mydisplay.print("BackFlips");
+    mydisplay.println(flips);
+    mydisplay.println(infos);
+     
+    
   }
   
 //OTHERS 
 /*
-DETECT BUTTON PRESS - RESET
+DETECT BUTTON PRESS - RESET -- done
 SLEEP AND WAKEUP FUNCTIONS
 */
 }
@@ -196,3 +230,17 @@ void handleClick(){
   //reset the levels to zero
   levelcompleted =0;
   }
+ void handelesleep(){
+  gotosleep_flag = 1;
+  }
+  void gotosleep(){
+    digitalWrite(accel_pwr, LOW);
+    digitalWrite(oled_pwr, LOW);
+    digitalWrite(gyro_pwr, LOW);
+    sleepy = 1 ;
+    gotosleep_flag = 0;
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_23, 0);
+    esp_deep_sleep_start();
+    }
+
+  
