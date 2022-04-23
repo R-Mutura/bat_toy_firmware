@@ -20,7 +20,7 @@ Adafruit_SSD1306 mydisplay = Adafruit_SSD1306(128, 64, &Wire);
 #define gyro_pwr   27
 //buttons
 #define rst_btn    18
-#define on_off_btn 23
+#define on_off_btn 33
 
 //onebutton initialization
     OneButton btn = OneButton(
@@ -241,7 +241,7 @@ void handleClick(){
     digitalWrite(gyro_pwr, LOW);
     sleepy = 1 ;
     gotosleep_flag = 0;
-    esp_sleep_enable_ext0_wakeup(GPIO_NUM_23, 0);
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_33, 0);
     esp_deep_sleep_start();
     }
 
