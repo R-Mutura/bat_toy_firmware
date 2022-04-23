@@ -4,17 +4,19 @@ The repo contains all the firmware codes for the project and instructions on how
 
 ## Requirements
 1) Set up the IDE, for this application you will need to download the Arduino ide [here](https://www.arduino.cc/en/software) if you don't have it already installed for your distributions
-2) Once downloaded and proceed to the next instructions
+2) Instal the board support package for ESP32 by goint to ` Tools > Board:xx > Board Manager`. In the search bar type ESP32 and select install ESP32 by Espressid Systems.  3) Now select TinyPico from ` Tools > Board:xx > ESP32 Arduino > TinyPico`
+ 
+ Once done proceed to the next instructions.
 ## Download the files 
-3)  Download all the files on the `Code`:arrow_down_small: on this platform, In your downloads you will get the a folder :file_folder:  `bat_toy_firmware`this will have:
+4)  Download all the files on the `Code`:arrow_down_small: on this platform, In your downloads you will get the a folder :file_folder:  `bat_toy_firmware`this will have:
  - bat_toy_firmware.ino
  - mpu6050_init.h
  - mpu6050ic.h
  - MXC6655XA.h and
  - Libraries zip file -this contains all the related libraries used in the project
  ## Library Installation
-4)  On library installation unzip the folder :file_folder: `libraries` in the DISHWASHER arduino :file_folder:, copy and paste all the folders to your directory `documents/arduino/library` folder :file_folder:
-5)  Open the `bat_toy_firmware.ino`  on `bat_toy_firmware`folder :file_folder: with the downloaded ide, compile and upload to the hardware `(procedure on how to use the ide is on the tutorial link)`:link:    [tutorial](https://www.youtube.com/watch?v=nL34zDTPkcs&t=3s)
+5)  On library installation unzip the folder :file_folder: `libraries` in the DISHWASHER arduino :file_folder:, copy and paste all the folders to your directory `documents/arduino/library` folder :file_folder:
+6)  Open the `bat_toy_firmware.ino`  on `bat_toy_firmware`folder :file_folder: with the downloaded ide, compile and upload to the hardware `(procedure on how to use the ide is on the tutorial link)`:link:    [tutorial](https://www.youtube.com/watch?v=nL34zDTPkcs&t=3s)
 
 # Uploading the codes  :arrow_up:
 You can buy the FTDI from here :link: [buy ftdi](https://www.amazon.com/HiLetgo-FT232RL-Converter-Adapter-Breakout/dp/B00IJXZQ7C/ref=sr_1_3?keywords=FTDI&qid=1650483928&sr=8-3)
