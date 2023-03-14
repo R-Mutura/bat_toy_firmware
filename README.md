@@ -15,7 +15,7 @@ The repo contains all the firmware codes for the project and instructions on how
  - MXC6655XA.h and
  - Libraries zip file -this contains all the related libraries used in the project
  ## Library Installation
-5)  On library installation unzip the folder :file_folder: `libraries` in the DISHWASHER arduino :file_folder:, copy and paste all the folders to your directory `documents/arduino/library` folder :file_folder:
+5)  On library installation unzip the folder :file_folder: `libraries` in the bat_toy_firmware arduino :file_folder:, copy and paste all the folders to your directory `documents/arduino/library` folder :file_folder:
 6)  Open the `bat_toy_firmware.ino`  on `bat_toy_firmware`folder :file_folder: with the downloaded ide, compile and upload to the hardware `(procedure on how to use the ide is on the tutorial link)`:link:    [tutorial](https://www.youtube.com/watch?v=nL34zDTPkcs&t=3s)
 
 # Uploading the codes  :arrow_up:
